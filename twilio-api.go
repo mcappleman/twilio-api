@@ -14,15 +14,20 @@ func main() {
 
 	file, err := os.OpenFile(conf.LOG_FILE, os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
 	if err != nil {
-		log.Println("Cant do nothing")
-		log.Println(err)
-		log.Fatalln("Unable to open log file.")
+		file, err = os.Create(conf.LOG_FILE)
+		if err != nil {
+			log.Println(conf.LOG_FILE)
+			log.Println("Unable to create log file")
+			log.Fatalln(err)
+		}
 	}
 
 	defer file.Close()
 
 	log.SetOutput(file)
 	log.Println("Logging started")
+
+	os.Exit(0)
 
 	// session := mongodb.NewSession(conf.DATABASE_URL, conf.DATABASE_NAME)
 
