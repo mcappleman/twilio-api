@@ -3,18 +3,13 @@ package main
 import (
 	"log"
 	"os"
-
-	"github.com/mcappleman/twilio-api/config"
-	// "github.com/mcappleman/twilio-api/mongodb"
 )
 
 func main() {
 
-	conf := config.DecodeConfig()
-
-	file, err := os.OpenFile(conf.LOG_FILE, os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
+	file, err := os.OpenFile(os.Getenv("LOG_FILE_PATH"), os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
 	if err != nil {
-		file, err = os.Create(conf.LOG_FILE)
+		file, err = os.Create(os.Getenv("LOG_FILE_PATH"))
 		if err != nil {
 			log.Println(conf.LOG_FILE)
 			log.Println("Unable to create log file")
@@ -27,8 +22,12 @@ func main() {
 	log.SetOutput(file)
 	log.Println("Logging started")
 
-	os.Exit(0)
-
-	// session := mongodb.NewSession(conf.DATABASE_URL, conf.DATABASE_NAME)
+	app := App{}
+	err := app.Init()
+	if err != nil {
+		log.Println("Escalated to the top")
+		recover(err)
+	}
+	app.Run(":8080")
 
 }

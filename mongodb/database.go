@@ -10,16 +10,13 @@ type DatabaseSession struct {
     databaseName string
 }
 
-func NewSession(url string, name string) *DatabaseSession {
-
-	log.Println(url)
-	log.Println(name)
+func NewSession(url string, name string) *DatabaseSession, error {
 
 	url = url + "/" + name
     session, err := mgo.Dial(url)
     if err != nil {
-    	log.Println(err)
-        panic(err)
+    	log.Println("Error Connecting to Mongo Database")
+        return err
     }
 
     return &DatabaseSession{session, name}
