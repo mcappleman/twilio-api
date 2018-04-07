@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"os"
+
+	"github.com/mcappleman/twilio-api/app"
 )
 
 func main() {
@@ -22,12 +24,12 @@ func main() {
 	log.SetOutput(file)
 	log.Println("Logging started")
 
-	app := App{}
-	err := app.Init()
+	a := app.App{}
+	err := a.Init()
 	if err != nil {
 		log.Println("Escalated to the top")
 		recover(err)
 	}
-	app.Run(":8080")
+	a.Run(":8080")
 
 }
