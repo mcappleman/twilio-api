@@ -4,3 +4,17 @@
 2018/04/08 03:26:01 Logging started
 2018/04/08 03:28:36 Logging started
 2018/04/08 03:29:42 Logging started
+2018/04/08 12:31:55 Logging started
+2018/04/08 12:34:33 Logging started
+2018/04/08 12:35:35 Logging started
+2018/04/08 12:36:03 Logging started
+2018/04/08 12:38:46 Logging started
+2018/04/08 12:38:46 App Init Method Begin
+2018/04/08 12:38:46 Error Connecting to Mongo Database
+2018/04/08 12:38:46 Escalated to the top
+2018/04/08 12:38:46 server returned error on SASL authentication step: Invalid database name: 'drinen-mlb-feed/drinen-mlb-feed'
+2018/04/08 13:18:28 Logging started
+2018/04/08 13:18:28 App Init Method Begin
+2018/04/08 13:18:28 App Init Mongo Connected
+2018/04/08 13:18:28 App Init Method End
+2018/04/08 13:18:28 Running on port :8080

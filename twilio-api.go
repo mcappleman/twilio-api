@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -24,13 +25,13 @@ func main() {
 	log.SetOutput(file)
 	log.Println("Logging started")
 
-	log.Println("SOMETHING OTHER THANT LOGGING STARTED")
 	a := app.App{}
-	log.Println("Main before Init")
 	err = a.Init()
 	if err != nil {
+		fmt.Println("Escalated to the top")
 		log.Println("Escalated to the top")
-		recover()
+		fmt.Println(err)
+		log.Fatalln(err)
 	}
 	a.Run(":8080")
 

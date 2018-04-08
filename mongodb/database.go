@@ -12,7 +12,7 @@ type DatabaseSession struct {
 
 func NewSession(url string, name string) (*DatabaseSession, error) {
 
-	url = url + "/" + name
+	// url = url + "/" + name
     session, err := mgo.Dial(url)
     if err != nil {
 		log.Println("Error Connecting to Mongo Database")
