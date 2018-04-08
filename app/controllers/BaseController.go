@@ -34,3 +34,9 @@ func (bc *BaseController) RespondWithJson(w http.ResponseWriter, code int, paylo
 	w.Write(response)
 
 }
+
+func (bc *BaseController) Index(w http.ResponseWriter, r *http.Request) {
+
+	bc.RespondWithJson(w, http.StatusOK, map[string]string{"message": "Hello Twilio World!"})
+
+}

@@ -17,10 +17,13 @@ type App struct {
 
 func (a *App) Init() error {
 
-		db, err := mongodb.NewSession(os.Getenv("MONGO_URL"), os.Getenv("DATABASE_NAME"))
+	log.Println("App Init Method Begin")
+	db, err := mongodb.NewSession(os.Getenv("MONGO_URL"), os.Getenv("DATABASE_NAME"))
 	if err != nil { return err }
+	log.Println("App Init Mongo Connected")
 	a.Router = mux.NewRouter()
 	a.BC = controllers.Init(db.Database())
+	log.Println("App Init Method End")
 
 	return nil
 
@@ -28,12 +31,14 @@ func (a *App) Init() error {
 
 func (a *App) InitRoutes() {
 
+	a.Router.HandleFunc("/", a.BC.Index).Methods("GET")
 	a.Router.HandleFunc("/games", a.BC.GetGames).Methods("GET")
 
 }
 
 func (a *App) Run(addr string) {
 
+	log.Println("Running on port :8080")
     log.Fatal(http.ListenAndServe(":8080", a.Router))
 
 }

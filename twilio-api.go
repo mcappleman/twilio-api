@@ -24,7 +24,9 @@ func main() {
 	log.SetOutput(file)
 	log.Println("Logging started")
 
+	log.Println("SOMETHING OTHER THANT LOGGING STARTED")
 	a := app.App{}
+	log.Println("Main before Init")
 	err = a.Init()
 	if err != nil {
 		log.Println("Escalated to the top")
