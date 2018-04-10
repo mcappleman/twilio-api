@@ -1,7 +1,7 @@
 package app
 
 import (
-	//"fmt"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -35,6 +35,7 @@ func (a *App) Init() error {
 
 func (a *App) InitRoutes() {
 
+	fmt.Println("Init Routes")
 	a.Router.HandleFunc("/", a.BC.Index).Methods("GET")
 	a.Router.HandleFunc("/games", a.BC.GetGames).Methods("GET")
 
@@ -42,7 +43,7 @@ func (a *App) InitRoutes() {
 
 func (a *App) Run(addr string) {
 
-	log.Println("Running on port :8080")
-    log.Fatal(http.ListenAndServe(":8080", a.Router))
+	fmt.Println("Running on port :8080")
+    log.Fatal(http.ListenAndServe(addr, a.Router))
 
 }
