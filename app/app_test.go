@@ -1,7 +1,7 @@
 package app_test
 
 import (
-	"os"
+	"fmt"
 	"testing"
 
 	"github.com/mcappleman/twilio-api/app"
@@ -9,11 +9,27 @@ import (
 
 var a app.App
 
-func TestMain(m *testing.M) {
+func TestInit(t *testing.T) {
 
+	fmt.Println("App Test Init Started")
 	a = app.App{}
-	a.Init()
+	err := a.Init()
+	if (err != nil) {
+		t.Fail()
+	}
+	fmt.Println("App Test Init Success")
 
-	os.Exit(0)
+}
+
+func TestInitRoutes(t *testing.T) {
+
+	fmt.Println("App Test Init Routes Started")
+	a = app.App{}
+	err := a.Init()
+	if (err != nil) {
+		t.Fail()
+	}
+	a.InitRoutes()
+	fmt.Println("App Test Init Routes Success")
 
 }

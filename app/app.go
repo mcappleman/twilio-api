@@ -1,7 +1,7 @@
 package app
 
 import (
-	"fmt"
+	//"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -18,16 +18,16 @@ type App struct {
 
 func (a *App) Init() error {
 
-	log.Println("App Init Method Begin")
-	fmt.Println("App Init Method Begin")
+	// log.Println("App Init Method Begin")
+	// fmt.Println("App Init Method Begin")
 	db, err := mongodb.NewSession(os.Getenv("DATABASE_URL"), os.Getenv("DATABASE_NAME"))
 	if err != nil { return err }
-	log.Println("App Init Mongo Connected")
-	fmt.Println("App Init Mongo Connected")
+	// log.Println("App Init Mongo Connected")
+	// fmt.Println("App Init Mongo Connected")
 	a.Router = mux.NewRouter()
 	a.BC = controllers.Init(db.Database())
-	log.Println("App Init Method End")
-	fmt.Println("App Init Method End")
+	// log.Println("App Init Method End")
+	// fmt.Println("App Init Method End")
 
 	return nil
 
