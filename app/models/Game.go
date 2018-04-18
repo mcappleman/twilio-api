@@ -1,6 +1,7 @@
  package models
 
  import(
+	// "fmt"
 	"time"
 
 	"gopkg.in/mgo.v2"
@@ -21,15 +22,15 @@
 
 const collectionName = "games"
 
- func GetGames(db *mgo.Database) ([]Game, error) {
+func GetGames(db *mgo.Database) ([]Game, error) {
 
 	gameList := []Game{}
+
 	err := db.C(collectionName).Find(bson.M{"status": "Final", "number_fire_odds": bson.M{"$ne": nil}}).All(&gameList)
-	// err := db.C(collectionName).Find(nil).All(&gameList)
 	if err != nil {
 		return nil, err
 	}
 
 	return gameList, nil
 
- }
+}

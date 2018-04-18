@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"encoding/json"
 	"net/http"
 
@@ -38,7 +37,6 @@ func (bc *BaseController) RespondWithJson(w http.ResponseWriter, code int, paylo
 
 func (bc *BaseController) Index(w http.ResponseWriter, r *http.Request) {
 
-	fmt.Println("Index Called")
 	bc.RespondWithJson(w, http.StatusOK, map[string]string{"message": "Hello Twilio World!"})
 
 }

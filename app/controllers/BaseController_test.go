@@ -7,20 +7,27 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/mcappleman/twilio-api/app/controllers"
+	"github.com/mcappleman/twilio-api/app"
 )
 
-var bc controllers.BaseController
+var a app.App
+
+func initTest() {
+
+	a = app.App{}
+	a.Init()
+
+}
 
 func TestIndex(t *testing.T) {
 
 	fmt.Println("Base Controller Index Test Started")
-	bc = controllers.BaseController{}
+	initTest()
 
 	r, _ := http.NewRequest("GET", "/", nil)
 	w := httptest.NewRecorder()
 
-	bc.Index(w, r)
+	a.BC.Index(w, r)
 
 	if (w.Code != 200) {
 		t.Fail()
@@ -43,7 +50,7 @@ func TestRespondWithJson(t *testing.T) {
 
 	w := httptest.NewRecorder()
 
-	bc.RespondWithJson(w, 200, map[string]string{"message": "Test"})
+	a.BC.RespondWithJson(w, 200, map[string]string{"message": "Test"})
 
 	if (w.Code != 200) {
 		t.Fail()
