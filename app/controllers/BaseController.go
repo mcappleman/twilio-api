@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	// "fmt"
 	"encoding/json"
 	"net/http"
 
@@ -27,6 +28,7 @@ func (bc *BaseController) RespondWithError(w http.ResponseWriter, code int, mess
 
 func (bc *BaseController) RespondWithJson(w http.ResponseWriter, code int, payload interface{}) {
 
+	// fmt.Println(len(payload))
 	response, _ := json.Marshal(payload)
 
 	w.Header().Set("Content-Type", "application/json")

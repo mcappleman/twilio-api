@@ -35,6 +35,6 @@ func main() {
 	}
 	a.InitRoutes()
 	a.Run(":8080")
-	// fmt.Println("Running on 8080")
+	fmt.Println("Running on 8080")
 
 }

@@ -26,7 +26,7 @@ func TestGetGames(t *testing.T) {
 	json.Unmarshal(w.Body.Bytes(), &body)
 
 	fmt.Println("Body")
-	fmt.Println(len(body))
+	fmt.Println(body)
 	fmt.Println("Game Controller GetGames Test Success")
 
 }
