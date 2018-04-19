@@ -40,6 +40,13 @@ func (a *App) InitRoutes() {
 	a.Router.HandleFunc("/games", a.BC.GetGames).Methods("GET")
 	a.Router.HandleFunc("/message", a.BC.PostMessage).Methods("POST")
 
+	a.Router.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
+		t, err := route.GetPathTemplate()
+		if err != nil { return err }
+		fmt.Println(t)
+		return nil
+	})
+
 }
 
 func (a *App) Run(addr string) {
