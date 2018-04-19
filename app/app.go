@@ -7,13 +7,13 @@ import (
 	"os"
 
 	"github.com/gorilla/mux"
-	"github.com/mcappleman/twilio-api/mongodb"
 	"github.com/mcappleman/twilio-api/app/controllers"
+	"github.com/mcappleman/twilio-api/mongodb"
 )
 
 type App struct {
-	Router	*mux.Router
-	BC		controllers.BaseController
+	Router *mux.Router
+	BC     controllers.BaseController
 }
 
 func (a *App) Init() error {
@@ -21,7 +21,9 @@ func (a *App) Init() error {
 	// log.Println("App Init Method Begin")
 	// fmt.Println("App Init Method Begin")
 	db, err := mongodb.NewSession(os.Getenv("DATABASE_URL"), os.Getenv("DATABASE_NAME"))
-	if err != nil { return err }
+	if err != nil {
+		return err
+	}
 	// log.Println("App Init Mongo Connected")
 	// fmt.Println("App Init Mongo Connected")
 	a.Router = mux.NewRouter()
@@ -42,7 +44,9 @@ func (a *App) InitRoutes() {
 
 	a.Router.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
 		t, err := route.GetPathTemplate()
-		if err != nil { return err }
+		if err != nil {
+			return err
+		}
 		fmt.Println(t)
 		return nil
 	})
@@ -52,6 +56,6 @@ func (a *App) InitRoutes() {
 func (a *App) Run(addr string) {
 
 	fmt.Println("Running on port :8080")
-    log.Fatal(http.ListenAndServe(addr, a.Router))
+	log.Fatal(http.ListenAndServe(addr, a.Router))
 
 }

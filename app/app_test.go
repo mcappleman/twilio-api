@@ -14,7 +14,7 @@ func TestInit(t *testing.T) {
 	fmt.Println("App Test Init Started")
 	a = app.App{}
 	err := a.Init()
-	if (err != nil) {
+	if err != nil {
 		t.Fail()
 	}
 	fmt.Println("App Test Init Success")
@@ -26,7 +26,7 @@ func TestInitRoutes(t *testing.T) {
 	fmt.Println("App Test Init Routes Started")
 	a = app.App{}
 	err := a.Init()
-	if (err != nil) {
+	if err != nil {
 		t.Fail()
 	}
 	a.InitRoutes()

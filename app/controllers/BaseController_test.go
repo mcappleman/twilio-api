@@ -29,14 +29,14 @@ func TestIndex(t *testing.T) {
 
 	a.BC.Index(w, r)
 
-	if (w.Code != 200) {
+	if w.Code != 200 {
 		t.Fail()
 	}
 
 	var body map[string]string
 	json.Unmarshal(w.Body.Bytes(), &body)
 
-	if (body["message"] != "Hello Twilio World!") {
+	if body["message"] != "Hello Twilio World!" {
 		t.Fail()
 	}
 
@@ -52,14 +52,14 @@ func TestRespondWithJson(t *testing.T) {
 
 	a.BC.RespondWithJson(w, 200, map[string]string{"message": "Test"})
 
-	if (w.Code != 200) {
+	if w.Code != 200 {
 		t.Fail()
 	}
 
 	var body map[string]string
 	json.Unmarshal(w.Body.Bytes(), &body)
 
-	if (body["message"] != "Test") {
+	if body["message"] != "Test" {
 		t.Fail()
 	}
 

@@ -10,7 +10,7 @@ import (
 
 func main() {
 
-	file, err := os.OpenFile(os.Getenv("LOG_FILE_PATH"), os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
+	file, err := os.OpenFile(os.Getenv("LOG_FILE_PATH"), os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		file, err = os.Create(os.Getenv("LOG_FILE_PATH"))
 		if err != nil {

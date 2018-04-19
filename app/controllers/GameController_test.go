@@ -19,7 +19,7 @@ func TestGetGames(t *testing.T) {
 
 	a.BC.GetGames(w, r)
 
-	if (w.Code != 200) {
+	if w.Code != 200 {
 		t.Fail()
 		return
 	}

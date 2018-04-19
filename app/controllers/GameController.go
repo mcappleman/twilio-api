@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"fmt"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/url"
 	"os"
@@ -12,19 +12,19 @@ import (
 )
 
 type ListResponse struct {
-	Message	string
-	Body	[]models.Game
+	Message string
+	Body    []models.Game
 }
 
 type TwilioParams struct {
-	MessageSid			string
-	SmsSid				string
-	AccountSid			string
-	MessagingServiceSid	string
-	From				string
-	To					string
-	Body				string
-	NumMedia			string
+	MessageSid          string
+	SmsSid              string
+	AccountSid          string
+	MessagingServiceSid string
+	From                string
+	To                  string
+	Body                string
+	NumMedia            string
 }
 
 func (bc *BaseController) GetGames(w http.ResponseWriter, r *http.Request) {
@@ -57,7 +57,6 @@ func (bc *BaseController) PostMessage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-
 }
 
 func sendMessage(message string, toNumber string, fromNumber string) error {
@@ -74,21 +73,27 @@ func sendMessage(message string, toNumber string, fromNumber string) error {
 
 	client := &http.Client{}
 	req, err := http.NewRequest("POST", twilioUrl, &msgDataReader)
-	if err != nil { return err }
+	if err != nil {
+		return err
+	}
 
 	req.SetBasicAuth(accountSid, authToken)
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
 	resp, err := client.Do(req)
-	if err != nil { return err }
+	if err != nil {
+		return err
+	}
 
-	if (resp.StatusCode >= 200 && resp.StatusCode < 300) {
+	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 
 		var data map[string]interface{}
 		decoder := json.NewDecoder(resp.Body)
 		err := decoder.Decode(&data)
-		if err != nil { return err }
+		if err != nil {
+			return err
+		}
 
 	}
 

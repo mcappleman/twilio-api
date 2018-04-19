@@ -9,7 +9,7 @@ import (
 )
 
 type BaseController struct {
-	DB	*mgo.Database
+	DB *mgo.Database
 }
 
 func Init(db *mgo.Database) BaseController {
