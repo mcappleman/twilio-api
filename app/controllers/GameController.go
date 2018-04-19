@@ -1,7 +1,8 @@
 package controllers
 
 import (
-	// "fmt"
+	"fmt"
+	// "encoding/json"
 	"net/http"
 
 	"github.com/mcappleman/twilio-api/app/models"
@@ -10,6 +11,17 @@ import (
 type ListResponse struct {
 	Message	string
 	Body	[]models.Game
+}
+
+type TwilioParams struct {
+	MessageSid			string
+	SmsSid				string
+	AccountSid			string
+	MessagingServiceSid	string
+	From				string
+	To					string
+	Body				string
+	NumMedia			string
 }
 
 func (bc *BaseController) GetGames(w http.ResponseWriter, r *http.Request) {
@@ -25,5 +37,17 @@ func (bc *BaseController) GetGames(w http.ResponseWriter, r *http.Request) {
 	payload := ListResponse{"Games Retrieved Successfully", gList}
 
 	bc.RespondWithJson(w, http.StatusOK, payload)
+
+}
+
+func (bc *BaseController) PostMessage(w http.ResponseWriter, r *http.Request) {
+
+	r.ParseForm()
+
+	for key, value := range r.Form {
+		fmt.Printf("%s = %s\n", key, value)
+	}
+
+	fmt.Println("Message Successful")
 
 }

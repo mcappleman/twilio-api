@@ -38,6 +38,7 @@ func (a *App) InitRoutes() {
 	fmt.Println("Init Routes")
 	a.Router.HandleFunc("/", a.BC.Index).Methods("GET")
 	a.Router.HandleFunc("/games", a.BC.GetGames).Methods("GET")
+	a.Router.HandleFunc("/message", a.BC.PostMessage).Methods("POST")
 
 }
 
