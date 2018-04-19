@@ -2,8 +2,11 @@ package controllers
 
 import (
 	"fmt"
-	// "encoding/json"
+	"encoding/json"
 	"net/http"
+	"net/url"
+	"os"
+	"strings"
 
 	"github.com/mcappleman/twilio-api/app/models"
 )
@@ -42,12 +45,64 @@ func (bc *BaseController) GetGames(w http.ResponseWriter, r *http.Request) {
 
 func (bc *BaseController) PostMessage(w http.ResponseWriter, r *http.Request) {
 
+	fmt.Println(r)
 	r.ParseForm()
 
 	for key, value := range r.Form {
 		fmt.Printf("%s = %s\n", key, value)
 	}
 
+	fmt.Println("Sending the response now!")
+	fmt.Printf("To: %s\n", r.Form["From"][0])
+	fmt.Printf("From: %s\n", r.Form["To"][0])
+
+	err := sendMessage("Hello Twilio World", r.Form["From"][0], r.Form["To"][0])
+	if err != nil {
+		fmt.Println("Error from send Message")
+		fmt.Println(err)
+		return
+	}
+
 	fmt.Println("Message Successful")
+	fmt.Println("")
+	fmt.Println("")
+	// bc.RespondWithJson(w, http.StatusOK, ListResponse{"Message Sent", []models.Game{}})
+
+}
+
+func sendMessage(message string, toNumber string, fromNumber string) error {
+
+	accountSid := os.Getenv("TWILIO_ACCOUNT_SID")
+	authToken := os.Getenv("TWILIO_AUTH_TOKEN")
+	twilioUrl := "https://api.twilio.com/2010-04-01/Accounts/" + accountSid + "/Messages.json"
+
+	msgData := url.Values{}
+	msgData.Set("To", toNumber)
+	msgData.Set("From", fromNumber)
+	msgData.Set("Body", message)
+	msgDataReader := *strings.NewReader(msgData.Encode())
+
+	client := &http.Client{}
+	req, err := http.NewRequest("POST", twilioUrl, &msgDataReader)
+	if err != nil { return err }
+
+	req.SetBasicAuth(accountSid, authToken)
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
+	resp, err := client.Do(req)
+	if err != nil { return err }
+
+	if (resp.StatusCode >= 200 && resp.StatusCode < 300) {
+
+		var data map[string]interface{}
+		decoder := json.NewDecoder(resp.Body)
+		err := decoder.Decode(&data)
+		if err != nil { return err }
+		fmt.Println(data["sid"])
+
+	}
+
+	return nil
 
 }
