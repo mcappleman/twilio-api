@@ -100,3 +100,22 @@ func sendMessage(message string, toNumber string, fromNumber string) error {
 	return nil
 
 }
+
+func getBuckets() (string, error) {
+
+	type buckets struct {
+		all		stats
+		50_55	stats
+		55_60	stats
+		60_65	stats
+		65_70	stats
+		70_100	stats
+	}
+
+	type stats struct {
+		correct		int
+		total		int
+		percent		float64
+	}
+
+}

@@ -1,21 +1,26 @@
-package controllers_test
+package controllers
 
 import (
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 
-	"github.com/mcappleman/twilio-api/app"
+	"github.com/mcappleman/twilio-api/mongodb"
 )
 
-var a app.App
+var bc BaseController
 
 func initTest() {
 
-	a = app.App{}
-	a.Init()
+	db, err := mongodb.NewSession(os.Getenv("DATABASE_URL"), os.Getenv("DATABASE_NAME"))
+	if err != nil {
+		panic(err)
+	}
+
+	bc = Init(db.Database())
 
 }
 
@@ -27,7 +32,7 @@ func TestIndex(t *testing.T) {
 	r, _ := http.NewRequest("GET", "/", nil)
 	w := httptest.NewRecorder()
 
-	a.BC.Index(w, r)
+	bc.Index(w, r)
 
 	if w.Code != 200 {
 		t.Fail()
@@ -50,7 +55,7 @@ func TestRespondWithJson(t *testing.T) {
 
 	w := httptest.NewRecorder()
 
-	a.BC.RespondWithJson(w, 200, map[string]string{"message": "Test"})
+	bc.RespondWithJson(w, 200, map[string]string{"message": "Test"})
 
 	if w.Code != 200 {
 		t.Fail()

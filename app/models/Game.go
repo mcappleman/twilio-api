@@ -22,15 +22,30 @@ type Game struct {
 
 const collectionName = "games"
 
-func GetGames(db *mgo.Database) ([]Game, error) {
+func GetBucket(db *mgo.Database, min float64, max float64) ([]Game, error) {
 
 	gameList := []Game{}
 
-	err := db.C(collectionName).Find(bson.M{"status": "Final", "number_fire_odds": bson.M{"$ne": nil}}).All(&gameList)
+	err := db.C(collectionName).Find(
+			bson.M{
+				"status": "Final",
+				"number_fire_odds":
+					bson.M{
+						"$gte": min,
+						"$lt": max,
+					},
+				},
+			).All(&gameList)
 	if err != nil {
 		return nil, err
 	}
 
 	return gameList, nil
+
+}
+
+func GetGames(db *mgo.Database) ([]Game, error) {
+
+	return GetBucket(db, 0, 101)
 
 }

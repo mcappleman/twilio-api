@@ -1,4 +1,4 @@
-package controllers_test
+package controllers
 
 import (
 	"encoding/json"
@@ -17,18 +17,22 @@ func TestGetGames(t *testing.T) {
 	r, _ := http.NewRequest("GET", "/games", nil)
 	w := httptest.NewRecorder()
 
-	a.BC.GetGames(w, r)
+	bc.GetGames(w, r)
 
 	if w.Code != 200 {
 		t.Fail()
 		return
 	}
 
-	var body map[string]string
-	json.Unmarshal(w.Body.Bytes(), &body)
+	var body ListResponse
+	decoder := json.NewDecoder(w.Body)
+	err := decoder.Decode(&body)
+	if err != nil {
+		fmt.Println(err)
+		t.Fail()
+		return
+	}
 
-	fmt.Println("Body")
-	fmt.Println(body)
 	fmt.Println("Game Controller GetGames Test Success")
 
 }
@@ -46,7 +50,7 @@ func TestPostMessage(t *testing.T) {
 	r.Form = form
 	w := httptest.NewRecorder()
 
-	a.BC.PostMessage(w, r)
+	bc.PostMessage(w, r)
 
 	if w.Code < 200 || w.Code > 299 {
 		t.Fail()
@@ -54,5 +58,42 @@ func TestPostMessage(t *testing.T) {
 	}
 
 	fmt.Println("Game Controller PostMessage Test Success")
+
+}
+
+func TestSendMessage(t *testing.T) {
+
+	fmt.Println("Game Controller sendMessage Test Started")
+
+	message := "Unit Test SendMessage"
+	to := "+14077974748"
+	from := "+4074362712"
+
+	err := sendMessage(message, to, from)
+	if err != nil {
+		t.Fail()
+		return
+	}
+
+	fmt.Println("Game Controller sendMessage Test Success")
+
+}
+
+func TestGetBucket(t *testing.T) {
+
+	fmt.Println("Game Controller getBucket Test Started")
+
+	list, err := getBucket(50, 55)
+	if err != nil {
+		t.Fail()
+		return
+	}
+
+	if len(list) == 0 {
+		t.Fail()
+		return
+	}
+
+	fmt.Println("Game Controller getBucket Test Success")
 
 }
