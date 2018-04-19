@@ -45,28 +45,18 @@ func (bc *BaseController) GetGames(w http.ResponseWriter, r *http.Request) {
 
 func (bc *BaseController) PostMessage(w http.ResponseWriter, r *http.Request) {
 
-	fmt.Println(r)
 	r.ParseForm()
 
-	for key, value := range r.Form {
+	/*for key, value := range r.Form {
 		fmt.Printf("%s = %s\n", key, value)
-	}
-
-	fmt.Println("Sending the response now!")
-	fmt.Printf("To: %s\n", r.Form["From"][0])
-	fmt.Printf("From: %s\n", r.Form["To"][0])
+	}*/
 
 	err := sendMessage("Hello Twilio World", r.Form["From"][0], r.Form["To"][0])
 	if err != nil {
-		fmt.Println("Error from send Message")
 		fmt.Println(err)
 		return
 	}
 
-	fmt.Println("Message Successful")
-	fmt.Println("")
-	fmt.Println("")
-	// bc.RespondWithJson(w, http.StatusOK, ListResponse{"Message Sent", []models.Game{}})
 
 }
 
@@ -99,7 +89,6 @@ func sendMessage(message string, toNumber string, fromNumber string) error {
 		decoder := json.NewDecoder(resp.Body)
 		err := decoder.Decode(&data)
 		if err != nil { return err }
-		fmt.Println(data["sid"])
 
 	}
 

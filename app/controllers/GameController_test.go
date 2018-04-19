@@ -10,12 +10,6 @@ import (
 	"testing"
 )
 
-type Message struct {
-	To		[]string
-	From	[]string
-	Body	string
-}
-
 func TestGetGames(t *testing.T) {
 
 	fmt.Println("Game Controller GetGames Test Started")
@@ -43,23 +37,10 @@ func TestPostMessage(t *testing.T) {
 
 	fmt.Println("Game Controller PostMessage Test Started")
 
-	/*message := &Message{
-		To: []string{"+14076342712"},
-		From: []string{"+14077974748"},
-		Body: "Unit Test",
-	}*/
-
 	form := url.Values{}
 	form.Add("To", "[+14074362712]")
 	form.Add("From", "[+14077974748]")
 	form.Add("Body", "Unit Test")
-
-	/*jsonMessage, err := json.Marshal(message)
-	if err != nil {
-		fmt.Println(err)
-		t.Fail()
-		return
-	}*/
 
 	r, _ := http.NewRequest("POST", "/games", strings.NewReader(form.Encode()))
 	r.Form = form
@@ -71,8 +52,6 @@ func TestPostMessage(t *testing.T) {
 		t.Fail()
 		return
 	}
-
-	fmt.Println(w.Body)
 
 	fmt.Println("Game Controller PostMessage Test Success")
 
