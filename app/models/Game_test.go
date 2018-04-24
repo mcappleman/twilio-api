@@ -36,7 +36,7 @@ func TestGetBucket(t *testing.T) {
 	}
 
 	if len(games) == 0 {
-		fmt.Println(err)
+		fmt.Println(len(games))
 		t.Fail()
 		return
 	}

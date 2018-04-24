@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 
+	"gopkg.in/mgo.v2"
 	"github.com/mcappleman/twilio-api/app/models"
 )
 
@@ -25,6 +26,21 @@ type TwilioParams struct {
 	To                  string
 	Body                string
 	NumMedia            string
+}
+
+type stats struct {
+	correct		int
+	total		int
+	percent		float64
+}
+
+type buckets struct {
+	all				stats
+	bucket50_55		stats
+	bucket55_60		stats
+	bucket60_65		stats
+	bucket65_70		stats
+	bucket70_100	stats
 }
 
 func (bc *BaseController) GetGames(w http.ResponseWriter, r *http.Request) {
@@ -51,7 +67,13 @@ func (bc *BaseController) PostMessage(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("%s = %s\n", key, value)
 	}*/
 
-	err := sendMessage("Hello Twilio World", r.Form["From"][0], r.Form["To"][0])
+	message, err := getBuckets(bc.DB)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	err = sendMessage(message, r.Form["From"][0], r.Form["To"][0])
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -101,21 +123,79 @@ func sendMessage(message string, toNumber string, fromNumber string) error {
 
 }
 
-func getBuckets() (string, error) {
+func getBuckets(db *mgo.Database) (string, error) {
 
-	type buckets struct {
-		all		stats
-		50_55	stats
-		55_60	stats
-		60_65	stats
-		65_70	stats
-		70_100	stats
+	var err error
+	currentBuckets := buckets{}
+
+	currentBuckets.all, err = fillBucket(db, 0, 101)
+	if err != nil {
+		return "", err
 	}
 
-	type stats struct {
-		correct		int
-		total		int
-		percent		float64
+	currentBuckets.bucket50_55, err = fillBucket(db, 50, 55)
+	if err != nil {
+		return "", err
 	}
+
+	currentBuckets.bucket55_60, err = fillBucket(db, 55, 60)
+	if err != nil {
+		return "", err
+	}
+
+	currentBuckets.bucket60_65, err = fillBucket(db, 60, 65)
+	if err != nil {
+		return "", err
+	}
+
+	currentBuckets.bucket65_70, err = fillBucket(db, 65, 70)
+	if err != nil {
+		return "", err
+	}
+
+	currentBuckets.bucket70_100, err = fillBucket(db, 70, 101)
+	if err != nil {
+		return "", err
+	}
+
+	returnString := fmt.Sprintf("\nAll: %d of %d for %f percent accuracy", currentBuckets.all.correct, currentBuckets.all.total, currentBuckets.all.percent)
+	returnString += fmt.Sprintf("\n50-55: %d of %d for %f percent accuracy", currentBuckets.bucket50_55.correct, currentBuckets.bucket50_55.total, currentBuckets.bucket50_55.percent)
+	returnString += fmt.Sprintf("\n55-60: %d of %d for %f percent accuracy", currentBuckets.bucket55_60.correct, currentBuckets.bucket55_60.total, currentBuckets.bucket55_60.percent)
+	returnString += fmt.Sprintf("\n60-65: %d of %d for %f percent accuracy", currentBuckets.bucket60_65.correct, currentBuckets.bucket60_65.total, currentBuckets.bucket60_65.percent)
+	returnString += fmt.Sprintf("\n65-70: %d of %d for %f percent accuracy", currentBuckets.bucket65_70.correct, currentBuckets.bucket65_70.total, currentBuckets.bucket65_70.percent)
+	returnString += fmt.Sprintf("\n70-100: %d of %d for %f percent accuracy", currentBuckets.bucket70_100.correct, currentBuckets.bucket70_100.total, currentBuckets.bucket70_100.percent)
+
+	return returnString, nil
+
+}
+
+func fillBucket(db *mgo.Database, min int, max int) (stats, error) {
+
+	gList, err := models.GetBucket(db, float64(min), float64(max))
+	if err != nil {
+		return stats{}, err
+	}
+
+	currentStats := stats{}
+	currentStats.total = len(gList)
+	var correctPicks int = 0
+
+	for _, game := range gList {
+
+		winner := game.HomeTeam
+		if game.AwayRuns > game.HomeRuns {
+			winner = game.AwayTeam
+		}
+
+		if winner == game.NumberFireFavorite {
+			correctPicks += 1
+		}
+
+	}
+
+	currentStats.correct = correctPicks
+	currentStats.percent = float64(correctPicks)/float64(len(gList))
+
+	return currentStats, nil
 
 }

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"strconv"
 	"strings"
 	"testing"
 )
@@ -20,6 +21,7 @@ func TestGetGames(t *testing.T) {
 	bc.GetGames(w, r)
 
 	if w.Code != 200 {
+		fmt.Println("W Code: " + strconv.Itoa(w.Code))
 		t.Fail()
 		return
 	}
@@ -28,6 +30,7 @@ func TestGetGames(t *testing.T) {
 	decoder := json.NewDecoder(w.Body)
 	err := decoder.Decode(&body)
 	if err != nil {
+		fmt.Println("Decoder Error")
 		fmt.Println(err)
 		t.Fail()
 		return
@@ -79,21 +82,40 @@ func TestSendMessage(t *testing.T) {
 
 }
 
-func TestGetBucket(t *testing.T) {
+func TestGetBuckets(t *testing.T) {
 
-	fmt.Println("Game Controller getBucket Test Started")
+	fmt.Println("Game Controller getBuckets Test Started")
 
-	list, err := getBucket(50, 55)
+	returnMessage, err := getBuckets(bc.DB)
 	if err != nil {
 		t.Fail()
 		return
 	}
 
-	if len(list) == 0 {
+	if returnMessage == "" {
 		t.Fail()
 		return
 	}
 
-	fmt.Println("Game Controller getBucket Test Success")
+	fmt.Println(returnMessage)
+
+	fmt.Println("Game Controller getBuckets Test Success")
+
+}
+
+func TestFillBucket(t *testing.T) {
+
+	fmt.Println("Game Controller fillBucket Test Started")
+
+	var err error
+	bucket := buckets{}
+	bucket.bucket50_55, err = fillBucket(bc.DB, 50, 55)
+	if err != nil {
+		fmt.Println(err)
+		t.Fail()
+		return
+	}
+
+	fmt.Println("Game Controller fillBucket Test Success")
 
 }

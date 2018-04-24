@@ -16,7 +16,7 @@ type Game struct {
 	HomeRuns            int           `json:"home_runs" bson:"home_runs"`
 	AwayRuns            int           `json:"away_runs" bson:"away_runs"`
 	Status              string        `json:"status" bson:"status"`
-	NumnberFireFavorite bson.ObjectId `json:"number_fire_favorite" bson:"number_fire_favorite"`
+	NumberFireFavorite bson.ObjectId `json:"number_fire_favorite" bson:"number_fire_favorite"`
 	NumberFireOdds      float64       `json:"number_fire_odds" bson:"number_fire_odds"`
 }
 
